@@ -1,0 +1,165 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>ellipso</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-11-10"><meta name="DC.source" content="ellipso.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput">clc;
+clear;
+close <span class="string">all</span>;
+rng(0);
+<span class="comment">%  theta1 = linspace(.2,.9,5);</span>
+<span class="comment">%   theta2 = linspace(0.3,.9,5);</span>
+
+theta1 = [.3 .5 .7 1.1];
+theta2 = [.3 .6 .8 .9];
+
+a1 = 1;
+a2 = 2;
+
+v = length(theta1);
+<span class="comment">%   epsi = zeros(v);</span>
+figure;
+<span class="keyword">for</span> i =1:v
+    J = [ (-a1)*sin(theta1(i))-(a2*sin(theta1(i)+theta2(i))),(-a2)*sin(theta1(i)+theta2(i)) ;
+        a1*cos(theta1(i))+a2*cos(theta1(i)+theta2(i)), a2*cos(theta1(i)+theta2(i))];
+    A = inv(J*J');
+    [V,D] = eig(A);
+    Dig(:,:,i) = diag(D);
+
+    t = 0:pi/20:2*pi;
+    X = cos(t) /sqrt(D(1,1));
+    Y  = sin(t) /sqrt(D(2,2));
+
+    epsi(:,:,i) = inv(V')*[X;Y];
+
+    epsi(1,:,i) = epsi(1,:,i)+a1*cos(theta1(i))+a2*cos(theta1(i)+theta2(i));
+    epsi(2,:,i) = epsi(2,:,i) + a1*sin(theta1(i))-a2*sin(theta1(i)+theta2(i));
+    plot(epsi(1,:,i),epsi(2,:,i),<span class="string">'color'</span>, [rand rand rand]);
+    hold <span class="string">on</span>
+
+<span class="keyword">end</span>
+axis([-5,5,-5,5]);
+[~,largest] = max(Dig(2,1,:));
+[~,smallest] = min(Dig(2,1,:));
+
+plot(epsi(1,:,largest),epsi(2,:,largest),<span class="string">'color'</span>, [0 1 0]);
+plot(epsi(1,:,smallest),epsi(2,:,smallest),<span class="string">'color'</span>, [1 0 0]);
+
+hold <span class="string">off</span>
+</pre><img vspace="5" hspace="5" src="ellipso_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clc;
+clear;
+close all;
+rng(0);
+%  theta1 = linspace(.2,.9,5);
+%   theta2 = linspace(0.3,.9,5);
+
+theta1 = [.3 .5 .7 1.1];
+theta2 = [.3 .6 .8 .9];
+
+a1 = 1;
+a2 = 2;
+
+v = length(theta1);
+%   epsi = zeros(v);
+figure;
+for i =1:v
+    J = [ (-a1)*sin(theta1(i))-(a2*sin(theta1(i)+theta2(i))),(-a2)*sin(theta1(i)+theta2(i)) ;
+        a1*cos(theta1(i))+a2*cos(theta1(i)+theta2(i)), a2*cos(theta1(i)+theta2(i))];
+    A = inv(J*J');
+    [V,D] = eig(A);
+    Dig(:,:,i) = diag(D);
+    
+    t = 0:pi/20:2*pi;
+    X = cos(t) /sqrt(D(1,1));
+    Y  = sin(t) /sqrt(D(2,2));
+    
+    epsi(:,:,i) = inv(V')*[X;Y];
+    
+    epsi(1,:,i) = epsi(1,:,i)+a1*cos(theta1(i))+a2*cos(theta1(i)+theta2(i));
+    epsi(2,:,i) = epsi(2,:,i) + a1*sin(theta1(i))-a2*sin(theta1(i)+theta2(i));
+    plot(epsi(1,:,i),epsi(2,:,i),'color', [rand rand rand]);
+    hold on
+    
+end
+axis([-5,5,-5,5]);
+[~,largest] = max(Dig(2,1,:));
+[~,smallest] = min(Dig(2,1,:));
+
+plot(epsi(1,:,largest),epsi(2,:,largest),'color', [0 1 0]);
+plot(epsi(1,:,smallest),epsi(2,:,smallest),'color', [1 0 0]);
+
+hold off
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
